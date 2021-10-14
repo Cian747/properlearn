@@ -8,6 +8,11 @@ from rest_framework_simplejwt import views as jwt_views
 from django.conf.urls.static import static
 from django.conf import settings
 # from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+from rest_framework_swagger.views import get_swagger_view
+
+schema_view = get_swagger_view(title='Pastebin API')
+
+
 
 from .views import (
     AuthLogoutView,
@@ -16,6 +21,7 @@ from .views import (
     UserListView,
 )
 urlpatterns = [
+    path('swagger/', schema_view),
     url(r'^motivation/$', views.motivation),    
     url(r'^mot/$', views.MotList.as_view()),
     # http://127.0.0.1:8000/api/mot?category=2
