@@ -120,13 +120,13 @@ class MotivationalByCategory(APIView):
     def get_mot(self, cat_pk):
         try:
             # return Motivation.objects.get(category=cat_pk)
-            motivations=Motivation.objects.filter(category=cat_pk)
+            motivations=Motivation.objects.filter(category=cat_pk).all()
             return motivations
         except Motivation.DoesNotExist:
             return Http404
     def get(self, request,cat_pk, format=None):
         motivation = self.get_mot(cat_pk)
-        serializers = MotivationSerializer(motivation)
+        serializers = MotivationSerializer(motivation,many=True)
         return Response(serializers.data)
 #### Category
 class CategoryList(APIView):
