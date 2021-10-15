@@ -23,9 +23,9 @@ from .views import (
 urlpatterns = [
     path('swagger/', schema_view),
     url(r'^motivation/$', views.motivation),    
-    url(r'^mot/$', views.MotList.as_view()),
+    url(r'^motivation/(?P<pk>[0-9]+)/$', views.MotList.as_view()),
     # http://127.0.0.1:8000/api/mot?category=2
-    # url(r'motivation/mot-id/(?P<pk>[0-9]+)/$', views.MotivationalDescription.as_view()),
+    path('motivation/mot-id/<int:pk>', views.motivation_id, name='motivation_id'),
     url(r'motivation/mot-cat/(?P<cat_pk>[0-9]+)/$', views.MotivationalByCategory.as_view()),
     url(r'^rev/$', views.RevList.as_view()),
     # http://127.0.0.1:8000/api/rev?motivation=2

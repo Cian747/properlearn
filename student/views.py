@@ -83,14 +83,14 @@ def motivation(request):
 
 @api_view(['GET', 'POST', 'DELETE'])
 @permission_classes((AllowAny, ))
-def motivation_id(request, mot_pk):
+def motivation_id(request, pk):
     try: 
-        motivation = Motivation.objects.get(pk=mot_pk) 
+        motivation = Motivation.objects.filter(pk=pk).first() 
     except Motivation.DoesNotExist: 
         return JsonResponse({'message': 'The motivation does not exist'}, status=status.HTTP_404_NOT_FOUND) 
 
     if request.method == 'GET': 
-        motivation_serializer = MotivationSerializer(motivation) 
+        motivation_serializer = MotivationSerializer(motivation,many=False) 
         return JsonResponse(motivation_serializer.data) 
     
     elif request.method == 'PUT': 
