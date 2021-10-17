@@ -32,9 +32,10 @@ urlpatterns = [
     url(r'review/rev-id/(?P<pk>[0-9]+)/$', views.ReviewDescription.as_view()),
     url(r'^category/$', views.CategoryList.as_view()),
     url(r'^category/cat_idd/(?P<cat_pk>[0-9]+)$', views.category_id),
+
     path('review_thread/<int:id>',views.review_thread,name='review_thread'),
     path('wishlist/<int:pk>',views.wishlist_motivation,name='wishlist'),
-    
+    path('user_wishlist',views.all_wishlist,name='all user wishlist picks'),
     path('profile/',views.profile, name='profile'),
     path('token/obtain/', jwt_views.TokenObtainPairView.as_view(), name='token_create'),
     path('token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
@@ -47,7 +48,6 @@ urlpatterns = [
     path('review/<int:id>', views.review,  name = 'review'),
     path('current_user', views.current_user,name='current_user'),
     path('superuser/<int:pk>',views.change_to_superuser,name='superuser_status'),
-
 
 ]
 if settings.DEBUG:
