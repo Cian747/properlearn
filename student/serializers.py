@@ -146,6 +146,11 @@ class ReviewSerializer(serializers.ModelSerializer):
         fields = ('id', 'review', 'profile', 'motivation', 'created_at')
 
 
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('id', 'category_name')
+
 class SubscriptionSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     user = serializers.PrimaryKeyRelatedField(read_only=True, default=serializers.CurrentUserDefault(), source="user.username",)

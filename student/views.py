@@ -63,7 +63,8 @@ def motivation(request):
     # profile = Profile.objects.get(user=user)
     # serializer = ProfileSerializer(profile, many=False)
     if request.method == 'GET':
-        motivation = Motivation.objects.all()
+        # motivation = Motivation.objects.all()
+        motivation = Motivation.objects.order_by('-created_at')
        
         motivation_serializer = MotivationSerializer(motivation, many=True)
         return JsonResponse(motivation_serializer.data, safe=False)
@@ -86,11 +87,13 @@ def motivation(request):
 def motivation_id(request, pk):
     try: 
         motivation = Motivation.objects.filter(pk=pk).first() 
+
     except Motivation.DoesNotExist: 
         return JsonResponse({'message': 'The motivation does not exist'}, status=status.HTTP_404_NOT_FOUND) 
 
     if request.method == 'GET': 
         motivation_serializer = MotivationSerializer(motivation,many=False) 
+
         return JsonResponse(motivation_serializer.data) 
     
     elif request.method == 'PUT': 
@@ -121,12 +124,14 @@ class MotivationalByCategory(APIView):
         try:
             # return Motivation.objects.get(category=cat_pk)
             motivations=Motivation.objects.filter(category=cat_pk).all()
+
             return motivations
         except Motivation.DoesNotExist:
             return Http404
     def get(self, request,cat_pk, format=None):
         motivation = self.get_mot(cat_pk)
         serializers = MotivationSerializer(motivation,many=True)
+
         return Response(serializers.data)
 #### Category
 class CategoryList(APIView):
@@ -180,7 +185,8 @@ def review(request, id):
     # profile = Profile.objects.get(user=user)
     # serializer = ProfileSerializer(profile, many=False)
     if request.method == 'GET':
-        reviews = Review.objects.filter(motivation=motivation).all()
+        reviews = Review.objects.filter(motivation=motivation).order_by('-created_at')
+        # review = Review.objects.order_by('-created_at')
         review_serializer = ReviewSerializer(reviews, many=True)
         return JsonResponse(review_serializer.data, safe=False)
     
@@ -204,6 +210,14 @@ class RevList(generics.ListAPIView):
     serializer_class = ReviewSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['motivation',]
+
+class ReviewList(APIView):
+    permission_classes = (AllowAny, )
+    def get(self, request, format=None):
+        review = Review.objects.order_by('-created_at')
+        serializers =ReviewSerializer(review, many=True)
+        return Response(serializers.data)
+
 class ReviewDescription(APIView):
     permission_classes = (AllowAny, )
     def get_rev(self, pk):
@@ -287,7 +301,6 @@ class UserListView(APIView):
     serializer_class = UserListSerializer
     permission_classes = (IsAdminUser,)
 
-
     def get(self, request):
         user = request.user
         if user.role != 1:
@@ -319,7 +332,7 @@ def all_users(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     # for use in users:
     #     if request.method == 'PUT':
-    #         user_serializer = UserListSerializer(use,data=request.data['is_active'])
+    #         user_serializer = UserListSerializer(use,data=request.data )
 
     #         if user_serializer.is_valid():
     #             user_serializer.save()
@@ -374,13 +387,11 @@ def profile(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
     elif request.method == 'PUT':
         profile_serializer = ProfileSerializer(instance=profile, data=request.data,context={'request': request})
-
         if profile_serializer.is_valid():
             profile_serializer.save()
             return Response(profile_serializer.data, status=status.HTTP_200_OK)
         else:
             return Response(profile_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 # Check if the user has admin privileges 
 @api_view(['GET','POST'])
@@ -402,11 +413,21 @@ def review_thread(request,id):
             review_serializer.save(
                 review = Review.objects.get(id=id),
                 profile = Profile.objects.filter(user=user).first()
-
             )
             return Response(review_serializer.data,status = status.HTTP_200_OK)
         else:
             return Response(review_serializer.errors,status = status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes((IsAuthenticated,))
+# @authentication_classes((JWTAuthentication,))
+def current_user(request):
+    user = request.user
+
+    if request.method == 'GET':
+        serializer = UserListSerializer(user, many=False)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 # Make subscription api
 @api_view(['GET', 'POST', 'DELETE'])
@@ -442,7 +463,6 @@ def wishlist_motivation(request,pk):
     profile = Profile.objects.filter(user=user).first()
     wishlist = WishList.objects.filter(profile=profile).all()
     motivation = Motivation.objects.get(pk=pk)
-
 
     if request.method == 'GET':
         wishlist_serializer = WishListSerializer(wishlist,many=True)

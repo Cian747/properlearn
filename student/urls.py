@@ -27,7 +27,7 @@ urlpatterns = [
     # http://127.0.0.1:8000/api/mot?category=2
     path('motivation/mot-id/<int:pk>', views.motivation_id, name='motivation_id'),
     url(r'motivation/mot-cat/(?P<cat_pk>[0-9]+)/$', views.MotivationalByCategory.as_view()),
-    url(r'^rev/$', views.RevList.as_view()),
+    url(r'^rev/$', views.ReviewList.as_view()),
     # http://127.0.0.1:8000/api/rev?motivation=2
     url(r'review/rev-id/(?P<pk>[0-9]+)/$', views.ReviewDescription.as_view()),
     url(r'^category/$', views.CategoryList.as_view()),
@@ -48,8 +48,8 @@ urlpatterns = [
     path('review/<int:id>', views.review,  name = 'review'),
     path('current_user', views.current_user,name='current_user'),
     path('superuser/<int:pk>',views.change_to_superuser,name='superuser_status'),
-
 ]
+
 if settings.DEBUG:
     urlpatterns+= static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 
