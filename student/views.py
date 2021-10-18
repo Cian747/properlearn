@@ -431,7 +431,7 @@ def current_user(request):
 
 # Make subscription api
 @api_view(['GET', 'POST', 'DELETE'])
-@permission_classes((AllowAny,))
+@permission_classes((IsAuthenticated,))
 def subscription_service(request,pk):
     category = Category.objects.filter(pk=pk).first()
     user = request.user
