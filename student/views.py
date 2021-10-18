@@ -437,8 +437,9 @@ def subscription_service(request,pk):
     user = request.user
 
     if request.method == 'GET':
-        serializer = SubscriptionSerializer(category, many=False)
+        serializer = SubscriptionSerializer(category, many=False,context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
+
     elif request.method == 'POST':
         subscription_serializer = SubscriptionSerializer(data=request.data,context={'request': request})
  
