@@ -154,6 +154,8 @@ CORS_ORIGIN_WHITELIST = (
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",
+    'https://mutuafranklin.github.io/ProperlearnApp/',
+
 ]
 
 REST_FRAMEWORK = {
