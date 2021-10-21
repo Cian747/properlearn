@@ -109,8 +109,8 @@ DATABASES = {
     'default': {
         'ENGINE':'django.db.backends.postgresql',
         'NAME':'motivation',
-        'USER':'moringa',
-        'PASSWORD':'Frank50',
+        'USER':'cyan',
+        'PASSWORD':'ms254',
     }
 }
 
@@ -148,8 +148,8 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_ALLOW_ALL = False
 
 CORS_ORIGIN_WHITELIST = (
-       'http://localhost:4200',
-       'https://mutuafranklin.github.io/ProperlearnApp/',
+    'http://localhost:4200',
+    'https://mutuafranklin.github.io/ProperlearnApp/',
 )
 
 CSRF_TRUSTED_ORIGINS = [
